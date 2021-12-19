@@ -58,13 +58,13 @@
           <div class="modal-body">
             <form
               name="reserve"
+              id= "form"
               action="index.html"
               method="get"
-              onsubmit="return validate();"
             >
               <div
-                class="formData">
-                <label>Prénom</label><br>
+                class="formData" data-error="Veuillez entrer 2 caractères ou plus pour le champ du nom">
+                <label for="first">Prénom</label><br>
                 <input
                   class="text-control"
                   type="text"
@@ -74,8 +74,8 @@
                 /><br>
               </div>
               <div
-                class="formData">
-                <label>Nom</label><br>
+                class="formData" data-error="Veuillez entrer 2 caractères ou plus pour le champ du nom">
+                <label for="last">Nom</label><br>
                 <input
                   class="text-control"
                   type="text"
@@ -84,8 +84,8 @@
                 /><br>
               </div>
               <div
-                class="formData">
-                <label>E-mail</label><br>
+                class="formData" data-error="Vous devez rentrer une adresse mail valide">
+                <label for="email">E-mail</label><br>
                 <input
                   class="text-control"
                   type="email"
@@ -95,7 +95,7 @@
               </div>
               <div
                 class="formData">
-                <label>Date de naissance</label><br>
+                <label for="birthdate">Date de naissance</label><br>
                 <input
                   class="text-control"
                   type="date"
@@ -104,8 +104,8 @@
                 /><br>
               </div>
               <div
-                class="formData">
-                <label>À combien de tournois GameOn avez-vous déjà participé ?</label><br>
+                class="formData" data-error="Vous devez choisir une option">
+                <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
                 <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
               </div>
               <p class="text-label">Quelles villes ?</p>
