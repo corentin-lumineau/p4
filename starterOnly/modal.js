@@ -11,6 +11,7 @@ function editNav() {
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
+const modalBtnClose = document.querySelector('.close');
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -20,19 +21,37 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
+//close modal event
+modalBtnClose.addEventListener('click', closeModal);
+
+// close modal form
+function closeModal() {
+  modalbg.style.display = "none";
+}
+
 //add confirmation when form is correctly submited
 
 //Validations
+
+//Hide and Show Validations function
+
+function showError(data) {
+  data.closest(".formData").dataset.errorVisible = "true";
+}
+
+function hideError(data) {
+  data.closest(".formData").dataset.errorVisible = "false";
+}
 
 //First name and last name
 
 const checkName = (element) => {  
     if (element.value.length < 2 || element.value.length == 0) {
-      element.closest(".formData").dataset.errorVisible = "true";
+      showError(element);
       return false;
     }
     else {
-      element.closest(".formData").dataset.errorVisible = "false";
+      hideError(element);
       return true;
     }
 }
@@ -55,11 +74,11 @@ const checkMail = (element) => {
   const valid = emailReg.test(element.value);
 
   if (!valid) {
-    element.closest(".formData").dataset.errorVisible = "true";
+    showError(element);
     return false;
   }
   else {
-    element.closest(".formData").dataset.errorVisible = "false";
+    hideError(element);
     return true;
   }
 }
@@ -67,9 +86,7 @@ const checkMail = (element) => {
 const email = document.getElementById('email');
 
 email.addEventListener('change', (event) => {
- 
   checkMail(event.currentTarget);
-
 });
 
 //Competition number
@@ -79,11 +96,9 @@ email.addEventListener('change', (event) => {
 const checkNumber = (data) => {
   data = Number(data);
   if (Number.isInteger(data)) {
-    console.log("ceci est un nombre");
     return true;
   }
   else {
-    console.log("ceci n'est pas un nombre");
     return false;
   }
 }
@@ -99,75 +114,187 @@ competitionNumber.addEventListener('change', (event) => {
 
 
 
-/* const checkCityInput = () => {
-  const cities = document.getElementsByName('location');
-  const res = [];
-  
-  cities.forEach((city) => {
-    const cityState = city.checked;
-    res.push(cityState);
-  });
-
-  if (res.every(elem => elem == false)) {
-    console.log("ville pas ok");
-    cities.closest(".formData").dataset.errorVisible = "true";
-    return false;
-    
-  }
-  else {
-    console.log("ville ok");
-    return true;
-  }
-}
-
 const cities = document.getElementsByName('location');
 cities.forEach((city) => {
-  city.addEventListener('click', (event) => {
-    checkCityInput();
-  });
-}); */
-
-const cities = document.getElementsByName('location');
-const checkCities = [];
-
-cities.forEach((city) => {
-  city.addEventListener('click', (event) => {
-    const cityState = event.currentTarget.checked;
-    checkCities.push(cityState);
-  });
-});
-
+  city.addEventListener('click', () => {
+    hideError(city);
+  })
+})
 
 
 //terms
 const terms = document.getElementById('checkbox1');
 
-const checkTerms = (data) => {
-  
-  if (data.checked == true) {
-    return true;
+
+terms.addEventListener('click', (event) => {
+  const checkbox = event.currentTarget
+  if (checkbox.checked) {
+    hideError(checkbox);
+  }
+
+  else {
+    showError(checkbox);
+  }
+});
+
+//Validations on Submit
+
+/* function checkValue(data) {
+  if (data === "") {
+    console.log(data);
+    const element = document.getElementById('first');
+    showError(element);
+    return false;
   }
   else {
+    const element = document.getElementById('first');
+    hideError(element);
+    return true;
+  }
+} */
+
+function checkCity(data) {
+  if (!data) {
+    const elements = document.getElementsByName('location');
+    elements.forEach((element) => {
+      element.closest('.formData').dataset.errorVisible = "true";
+    });
     return false;
+  }
+  else {
+    return true;
   }
 }
 
-terms.addEventListener('click', (event) => {
-  checkTerms(event.currentTarget.checked);
-})
+function checkFirstName(value) {
+  if (value === "") {
+    const element = document.getElementById('first');
+    showError(element);
+    return false;
+  }
+  else {
+    const element = document.getElementById('first');
+    hideError(element);
+    return true;
+  }
+}
 
-//Validation on Submit
+function checkLastName(value) {
+  if (value === "") {
+    const element = document.getElementById('last');
+    showError(element);
+    return false;
+  }
+  else {
+    const element = document.getElementById('last');
+    hideError(element);
+    return true;
+  }
+}
 
+function checkPresenceMail(value) {
+  if (value === "") {
+    const element = document.getElementById('email');
+    showError(element);
+    return false;
+  }
+  else {
+    const element = document.getElementById('email');
+    hideError(element);
+    return true;
+  }
+}
+
+function checkBirthDate(value) {
+  if (value === "") {
+    const element = document.getElementById('birthdate');
+    showError(element);
+    return false;
+  }
+  else {
+    const element = document.getElementById('birthdate');
+    hideError(element);
+    return true;
+  }
+}
+
+function checkQuantity(value) {
+  if (value === "") {
+    const element = document.getElementById('quantity');
+    showError(element);
+    return false;
+  }
+  else {
+    const element = document.getElementById('quantity');
+    hideError(element);
+    return true;
+  }
+}
+
+
+function checkInputs(data) {
+  res = [
+  checkFirstName(data['first']),
+  checkLastName(data['last']),
+  checkPresenceMail(data['email']),
+  checkBirthDate(data['birthdate']),
+  checkQuantity(data['quantity']),
+  checkCity(data['location'])
+  ];
+
+  if (res.includes(false)) {
+    return false;
+  }
+  else {
+    return true;
+  }
+  
+
+  /* if (!data["terms"]) {
+    const element = document.getElementById("checkbox1");
+    showError(element);
+  }
+ 
+  
+
+  for (let key in data) {
+    if (data.hasOwnProperty(key)) {
+      value = data[key];
+
+      if (value === "") {
+        const element = document.getElementById(`${key}`);
+        showError(element);
+        return false;
+      }
+    
+      else {
+        if (key != "location" && key != "terms") {
+          const element = document.getElementById(`${key}`);
+          hideError(element);
+        }
+      } 
+    }
+  }
+  return true;
+*/
+}
+
+
+function handleSubmit(event) {
+  const formData = new FormData(event.currentTarget);
+  const formProps = Object.fromEntries(formData);
+  if (!checkInputs(formProps)) {
+    event.preventDefault();
+  }
+  else {
+    event.currentTarget.submit();
+    alert('Votre formulaire a été correctement envoyé');
+  }
+
+}
 
 const form = document.getElementById('form');
-
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  console.log(formData);
-  const formProps = Object.fromEntries(formData);
-  console.log(formProps);
-})
+form.addEventListener('submit', handleSubmit)
 
 
 
