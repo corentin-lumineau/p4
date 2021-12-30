@@ -33,7 +33,7 @@ function closeModal() {
 
 //Validations
 
-//Hide and Show Validations function
+//Hide and Show Validations error
 
 function showError(data) {
   if (data) {
@@ -209,13 +209,13 @@ const checkCity = (data) => {
   const elements = document.getElementsByName('location');
   if (!data) {
     elements.forEach((element) => {
-      element.closest('.formData').dataset.errorVisible = "true";
+      showError(element);
     });
     return false;
   }
   else {
     elements.forEach((element) => {
-      element.closest('.formData').dataset.errorVisible = "false";
+      hideError(element);
     });
     return true;
   }
