@@ -36,83 +36,56 @@ function closeModal() {
 //Hide and Show Validations function
 
 function showError(data) {
-  data.closest(".formData").dataset.errorVisible = "true";
+  if (data) {
+    data.closest(".formData").dataset.errorVisible = "true";
+  }
 }
 
 function hideError(data) {
   data.closest(".formData").dataset.errorVisible = "false";
 }
 
-//First name and last name
+//Validations on Change
 
-const checkName = (element) => {  
-    if (element.value.length < 2 || element.value.length == 0) {
-      showError(element);
-      return false;
-    }
-    else {
-      hideError(element);
-      return true;
-    }
-}
+//First name and last name
 
 const firstName = document.getElementById('first');
 const lastName = document.getElementById('last');
 
 firstName.addEventListener('change', (event) => {
-  checkName(event.currentTarget);
+  checkFirstName(event.currentTarget.value);
 })
 
 lastName.addEventListener('change', (event) => {
-  checkName(event.currentTarget);
+  checkLastName(event.currentTarget.value);
 })
 
 //Email
 
-const checkMail = (element) => {
-  const emailReg = new RegExp(/^[^@]+@[^@]+\.[^@]+$/);
-  const valid = emailReg.test(element.value);
-
-  if (!valid) {
-    showError(element);
-    return false;
-  }
-  else {
-    hideError(element);
-    return true;
-  }
-}
-
 const email = document.getElementById('email');
 
 email.addEventListener('change', (event) => {
-  checkMail(event.currentTarget);
+  checkPresenceMail(event.currentTarget.value);
 });
+
+//BirthDate
+
+const birthdate = document.getElementById('birthdate');
+birthdate.addEventListener('change', (event) => {
+  checkBirthDate(event.currentTarget.value);
+})
 
 //Competition number
 
 
-
-const checkNumber = (data) => {
-  data = Number(data);
-  if (Number.isInteger(data)) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
 const competitionNumber = document.getElementById('quantity');
 
 competitionNumber.addEventListener('change', (event) => {
-  checkNumber(event.target.value);
+  checkQuantity(event.target.value);
 })
 
 
 //Select city
-
-
 
 const cities = document.getElementsByName('location');
 cities.forEach((city) => {
@@ -124,163 +97,16 @@ cities.forEach((city) => {
 
 //terms
 const terms = document.getElementById('checkbox1');
-
-
-terms.addEventListener('click', (event) => {
-  const checkbox = event.currentTarget
-  if (checkbox.checked) {
-    hideError(checkbox);
-  }
-
-  else {
-    showError(checkbox);
-  }
+terms.addEventListener('click', () => {
+ checkTerms()
 });
+
+
 
 //Validations on Submit
 
-/* function checkValue(data) {
-  if (data === "") {
-    console.log(data);
-    const element = document.getElementById('first');
-    showError(element);
-    return false;
-  }
-  else {
-    const element = document.getElementById('first');
-    hideError(element);
-    return true;
-  }
-} */
-
-function checkCity(data) {
-  if (!data) {
-    const elements = document.getElementsByName('location');
-    elements.forEach((element) => {
-      element.closest('.formData').dataset.errorVisible = "true";
-    });
-    return false;
-  }
-  else {
-    return true;
-  }
-}
-
-function checkFirstName(value) {
-  if (value === "") {
-    const element = document.getElementById('first');
-    showError(element);
-    return false;
-  }
-  else {
-    const element = document.getElementById('first');
-    hideError(element);
-    return true;
-  }
-}
-
-function checkLastName(value) {
-  if (value === "") {
-    const element = document.getElementById('last');
-    showError(element);
-    return false;
-  }
-  else {
-    const element = document.getElementById('last');
-    hideError(element);
-    return true;
-  }
-}
-
-function checkPresenceMail(value) {
-  if (value === "") {
-    const element = document.getElementById('email');
-    showError(element);
-    return false;
-  }
-  else {
-    const element = document.getElementById('email');
-    hideError(element);
-    return true;
-  }
-}
-
-function checkBirthDate(value) {
-  if (value === "") {
-    const element = document.getElementById('birthdate');
-    showError(element);
-    return false;
-  }
-  else {
-    const element = document.getElementById('birthdate');
-    hideError(element);
-    return true;
-  }
-}
-
-function checkQuantity(value) {
-  if (value === "") {
-    const element = document.getElementById('quantity');
-    showError(element);
-    return false;
-  }
-  else {
-    const element = document.getElementById('quantity');
-    hideError(element);
-    return true;
-  }
-}
-
-
-function checkInputs(data) {
-  res = [
-  checkFirstName(data['first']),
-  checkLastName(data['last']),
-  checkPresenceMail(data['email']),
-  checkBirthDate(data['birthdate']),
-  checkQuantity(data['quantity']),
-  checkCity(data['location'])
-  ];
-
-  if (res.includes(false)) {
-    return false;
-  }
-  else {
-    return true;
-  }
-  
-
-  /* if (!data["terms"]) {
-    const element = document.getElementById("checkbox1");
-    showError(element);
-  }
- 
-  
-
-  for (let key in data) {
-    if (data.hasOwnProperty(key)) {
-      value = data[key];
-
-      if (value === "") {
-        const element = document.getElementById(`${key}`);
-        showError(element);
-        return false;
-      }
-    
-      else {
-        if (key != "location" && key != "terms") {
-          const element = document.getElementById(`${key}`);
-          hideError(element);
-        }
-      } 
-    }
-  }
-  return true;
-*/
-}
-
-
-function handleSubmit(event) {
+const handleSubmit = (event) => {
+  event.preventDefault();
   const formData = new FormData(event.currentTarget);
   const formProps = Object.fromEntries(formData);
   if (!checkInputs(formProps)) {
@@ -290,11 +116,129 @@ function handleSubmit(event) {
     event.currentTarget.submit();
     alert('Votre formulaire a été correctement envoyé');
   }
-
 }
 
 const form = document.getElementById('form');
-form.addEventListener('submit', handleSubmit)
+form.addEventListener('submit', handleSubmit);
+
+const checkInputs = (data) => {
+  const res = [
+    checkFirstName(data['first']),
+    checkLastName(data['last']),
+    checkPresenceMail(data['email']),
+    checkBirthDate(data['birthdate']),
+    checkQuantity(data['quantity']),
+    checkCity(data['location']),
+    checkTerms()
+  ];
+  
+  if (res.includes(false)) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+//Validations functions
+
+const checkFirstName = (value) => {
+  const element = document.getElementById('first');
+  if (value === "" || value.length < 2) {
+    showError(element);
+    return false;
+  }
+  else {
+    hideError(element);
+    return true;
+  }
+}
+
+const checkLastName = (value) => {
+  const element = document.getElementById('last');
+  if (value === "" || value.length < 2) {
+    showError(element);
+    return false;
+  }
+  else {
+    hideError(element);
+    return true;
+  }
+}
+
+const checkPresenceMail = (value) => {
+  const emailReg = new RegExp(/^[^@]+@[^@]+\.[^@]+$/);
+  const valid = emailReg.test(value);
+  const element = document.getElementById('email');
+
+  if (value === "" || !valid) { 
+    showError(element);
+    return false;
+  }
+  else {
+    hideError(element);
+    return true;
+  }
+}
+
+const checkBirthDate = (value) => {
+  const element = document.getElementById('birthdate');
+  if (value === "") {
+    showError(element);
+    return false;
+  }
+  else {
+    hideError(element);
+    return true;
+  }
+}
+
+const checkQuantity = (value) => {
+  const element = document.getElementById('quantity');
+  if (value) {
+    hideError(element);
+    return true;
+  }
+  else {
+    showError(element);
+    return false;
+  }
+}
+
+const checkCity = (data) => {
+  const elements = document.getElementsByName('location');
+  if (!data) {
+    elements.forEach((element) => {
+      element.closest('.formData').dataset.errorVisible = "true";
+    });
+    return false;
+  }
+  else {
+    elements.forEach((element) => {
+      element.closest('.formData').dataset.errorVisible = "false";
+    });
+    return true;
+  }
+}
+
+const checkTerms = () => {
+  const element = document.getElementById('checkbox1');
+  if (element.checked) {
+    hideError(element);
+    return true;
+  }
+  else {
+    showError(element);
+    return false;
+  }
+}
+
+
+
+
+
+
+
 
 
 
