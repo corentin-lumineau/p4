@@ -98,7 +98,7 @@ cities.forEach((city) => {
 //terms
 const terms = document.getElementById('checkbox1');
 terms.addEventListener('click', () => {
- checkTerms()
+ checkTerms();
 });
 
 
@@ -106,14 +106,12 @@ terms.addEventListener('click', () => {
 //Validations on Submit
 
 const handleSubmit = (event) => {
-  event.preventDefault();
   const formData = new FormData(event.currentTarget);
   const formProps = Object.fromEntries(formData);
   if (!checkInputs(formProps)) {
     event.preventDefault();
   }
   else {
-    event.currentTarget.submit();
     alert('Votre formulaire a été correctement envoyé');
   }
 }
@@ -195,7 +193,8 @@ const checkBirthDate = (value) => {
 
 const checkQuantity = (value) => {
   const element = document.getElementById('quantity');
-  if (value) {
+  value = Number(value);
+  if (value && Number.isInteger(value)) {
     hideError(element);
     return true;
   }
