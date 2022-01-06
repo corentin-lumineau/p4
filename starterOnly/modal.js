@@ -12,6 +12,8 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const modalBtnClose = document.querySelector('.close');
+const modalInscription = document.getElementById("inscription");
+const modalConfirmation = document.getElementById("modal-confirmation");
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -21,12 +23,24 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
+// Launch modal confirmation
+function showModalConfirmation() {
+  modalInscription.style.display = "none";
+  modalConfirmation.style.display = "flex";
+}
+
 //close modal event
 modalBtnClose.addEventListener('click', closeModal);
 
 // close modal form
 function closeModal() {
   modalbg.style.display = "none";
+}
+
+//Submit function
+
+function submitForm() {
+  form.submit();
 }
 
 //add confirmation when form is correctly submited
@@ -112,7 +126,9 @@ const handleSubmit = (event) => {
     event.preventDefault();
   }
   else {
-    alert('Votre formulaire a été correctement envoyé');
+    event.preventDefault();
+    showModalConfirmation();
+    setTimeout(submitForm, 2000);
   }
 }
 
@@ -142,7 +158,7 @@ const checkInputs = (data) => {
 
 const checkFirstName = (value) => {
   const element = document.getElementById('first');
-  if (value === "" || value.length < 2) {
+  if (value.trim() === "" || value.trim().length < 2) {
     showError(element);
     return false;
   }
@@ -154,7 +170,7 @@ const checkFirstName = (value) => {
 
 const checkLastName = (value) => {
   const element = document.getElementById('last');
-  if (value === "" || value.length < 2) {
+  if (value.trim() === "" || value.trim().length < 2) {
     showError(element);
     return false;
   }
